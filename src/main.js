@@ -24,7 +24,7 @@ function restartGame() {
 		square.clickable = true;
 		square.clicked = false;
 		square.color = colorDefault;
-		score.innerHTML = 0;
+		score.innerHTML = '0';
 		square.draw();
 	});
 }
@@ -35,8 +35,10 @@ function update(clickedSquare) {
 	clickedSquare.clickable = false;
 	clickedSquare.color = colorClicked;
 	clickedSquare.draw();
+	
 	boardSquares.forEach((square) => {
 		if (square.clicked) return;
+		
 		const { x: squareX, y: squareY } = square.index;
 		const { x: clickedSquareX, y: clickedSquareY } = clickedSquare.index;
 		// if (
@@ -100,9 +102,7 @@ function update(clickedSquare) {
 	}
 	
 	const numberOfClicks = boardSquares.filter((square) => square.clicked).length;
-	if (score) {
-		score.innerHTML = numberOfClicks;
-	}
+	score.innerHTML = numberOfClicks;
 }
 
 canvas.addEventListener(
@@ -131,11 +131,8 @@ window.addEventListener('resize', () => {
 });
 
 document.addEventListener('keydown', (event) => {
-	switch (event.keyCode) {
-	case 32:
+	if (event.keyCode === 32) {
 		restartGame();
-		break;
-	default:
 	}
 });
 
