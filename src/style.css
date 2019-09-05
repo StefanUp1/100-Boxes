@@ -3,6 +3,11 @@ body {
     margin: 0;
 }
 
+#canvas {
+    border-right: 1px solid #dbdbd3;
+    border-width: 0.05em;
+}
+
 .stats {
     position: absolute;
     left: 110vh;

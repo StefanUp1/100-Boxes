@@ -1,13 +1,12 @@
 import './style.css';
+import { fabric } from 'fabric';
 
 const score = document.querySelector('#score');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = new fabric.Canvas('canvas');
 
 const elements = [
 	score,
 	canvas,
-	ctx,
 ];
 
 export default elements;

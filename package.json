@@ -30,6 +30,7 @@
     "webpack-cli": "^3.3.7"
   },
   "dependencies": {
+    "fabric": "^3.4.0",
     "webpack-dev-server": "^3.8.0"
   }
 }

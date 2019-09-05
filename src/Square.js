@@ -1,7 +1,8 @@
+import { fabric } from 'fabric';
 import colors from './colors';
 import elements from './elements';
 
-const [, , ctx] = elements;
+const [, canvas] = elements;
 const [, , colorDefault] = colors;
 
 export default class Square {
@@ -22,11 +23,17 @@ export default class Square {
 	}
 	
 	draw() {
-		ctx.beginPath();
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-		ctx.lineWidth = '0.2';
-		ctx.rect(this.position.x, this.position.y, this.width, this.height);
-		ctx.stroke();
+		const rect = new fabric.Rect({
+			top: this.position.y,
+			left: this.position.x,
+			width: this.width,
+			height: this.height,
+			fill: this.color,
+			stroke: '#000',
+			strokeWidth: 0.2,
+			selectable: false,
+		});
+		
+		canvas.add(rect);
 	}
 }

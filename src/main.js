@@ -1,15 +1,13 @@
+import { fabric } from 'fabric';
 import generateBoard from './generateBoard';
 import colors from './colors';
 import elements from './elements';
 
-const [score, canvas, ctx] = elements;
+const [score, canvas] = elements;
 const [colorClicked, colorClick, colorDefault] = colors;
 
-canvas.width = window.innerHeight;
-canvas.height = window.innerHeight;
+canvas.setDimensions({ width: window.innerHeight, height: window.innerHeight });
 
-const canvasLeft = canvas.offsetLeft;
-const canvasTop = canvas.offsetTop;
 let boardSquares = [];
 
 function init() {
@@ -35,12 +33,13 @@ function update(clickedSquare) {
 	clickedSquare.clickable = false;
 	clickedSquare.color = colorClicked;
 	clickedSquare.draw();
-	
+
 	boardSquares.forEach((square) => {
 		if (square.clicked) return;
-		
+
 		const { x: squareX, y: squareY } = square.index;
 		const { x: clickedSquareX, y: clickedSquareY } = clickedSquare.index;
+		// Partial solution using math formula
 		// if (
 		//   Math.ceil(
 		//     Math.pow(clickedSquareX - squareX, 2) +
@@ -83,50 +82,56 @@ function update(clickedSquare) {
 		}
 		square.draw();
 	});
-	
+
 	const clickableSquaresLeft = boardSquares.filter((square) => square.clickable);
 	if (!clickableSquaresLeft.length) {
-		ctx.rect(0, 0, window.innerHeight, window.innerHeight);
-		ctx.fillStyle = 'rgba(0,0,0,0.7)';
-		ctx.fill();
-		ctx.font = '28px Arial';
-		ctx.fillStyle = 'white';
-		ctx.textAlign = 'center';
-		ctx.font = '22px';
-		ctx.fillText('GAME OVER', window.innerHeight / 2, window.innerHeight / 2);
-		ctx.fillText(
-			'Press SPACEBAR to play again',
-			40 + window.innerHeight / 2,
-			40 + window.innerHeight / 2
-		);
+		const rect = new fabric.Rect({
+			top: 0,
+			left: 0,
+			width: window.innerHeight,
+			height: window.innerHeight,
+			fill: 'rgba(0,0,0,0.7)',
+			strokeWidth: 0.2,
+			selectable: false,
+		});
+		canvas.add(rect);
+
+		canvas.add(new fabric.IText('GAME OVER', {
+			fontFamily: '28px Arial',
+			fill: '#fff',
+			textAlign: 'center',
+			top: window.innerHeight / 2,
+		}));
+
+		canvas.add(new fabric.IText('Press SPACEBAR to play again', {
+			fontFamily: '22px Arial #fff',
+			fill: '#fff',
+			textAlign: 'center',
+			top: 40 + window.innerHeight / 2,
+		}));
 	}
-	
+
 	const numberOfClicks = boardSquares.filter((square) => square.clicked).length;
 	score.innerHTML = numberOfClicks;
 }
 
-canvas.addEventListener(
-	'click',
-	(event) => {
-		const x = event.pageX - canvasLeft;
-		const y = event.pageY - canvasTop;
-		boardSquares.forEach((square) => {
-			if (
-				y > square.position.y
-				&& y < square.position.y + square.height
-				&& x > square.position.x
-				&& x < square.position.x + square.width
-			) {
-				update(square);
-			}
-		});
-	},
-	false
-);
+canvas.on('mouse:down', (event) => {
+	const { x, y } = event.absolutePointer;
+	
+	boardSquares.forEach((square) => {
+		if (
+			y > square.position.y
+			&& y < square.position.y + square.height
+			&& x > square.position.x
+			&& x < square.position.x + square.width
+		) {
+			update(square);
+		}
+	});
+});
 
 window.addEventListener('resize', () => {
-	canvas.width = window.innerHeight;
-	canvas.height = window.innerHeight;
+	canvas.setDimensions({ width: window.innerHeight, height: window.innerHeight });
 	init();
 });
 
