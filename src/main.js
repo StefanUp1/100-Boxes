@@ -1,7 +1,8 @@
 import { fabric } from 'fabric';
-import generateBoard from './generateBoard';
-import colors from './colors';
-import elements from './elements';
+import './style/style.css';
+import colors from './constants/colors';
+import elements from './constants/elements';
+import generateBoard from './components/board/generateBoard';
 
 const [score, canvas] = elements;
 const [colorClicked, colorClick, colorDefault] = colors;
@@ -9,13 +10,6 @@ const [colorClicked, colorClick, colorDefault] = colors;
 canvas.setDimensions({ width: window.innerHeight, height: window.innerHeight });
 
 let boardSquares = [];
-
-function init() {
-	boardSquares = generateBoard();
-	boardSquares.forEach((square) => {
-		square.draw();
-	});
-}
 
 function restartGame() {
 	boardSquares.forEach((square) => {
@@ -115,30 +109,47 @@ function update(clickedSquare) {
 	score.innerHTML = numberOfClicks;
 }
 
-canvas.on('mouse:down', (event) => {
-	const { x, y } = event.absolutePointer;
-	
-	boardSquares.forEach((square) => {
-		if (
-			y > square.position.y
-			&& y < square.position.y + square.height
-			&& x > square.position.x
-			&& x < square.position.x + square.width
-		) {
-			update(square);
+function initCanvasEvents() {
+	canvas.on('mouse:down', (event) => {
+		const { x, y } = event.absolutePointer;
+		
+		boardSquares.forEach((square) => {
+			if (
+				y > square.position.y
+				&& y < square.position.y + square.height
+				&& x > square.position.x
+				&& x < square.position.x + square.width
+			) {
+				update(square);
+			}
+		});
+	});
+}
+
+function initDocumentEvents() {
+	document.addEventListener('keydown', (event) => {
+		if (event.keyCode === 32) {
+			restartGame();
 		}
 	});
-});
+}
 
-window.addEventListener('resize', () => {
-	canvas.setDimensions({ width: window.innerHeight, height: window.innerHeight });
-	init();
-});
+function init() {
+	boardSquares = generateBoard();
+	boardSquares.forEach((square) => {
+		square.draw();
+	});
+	
+	initCanvasEvents();
+	initDocumentEvents();
+}
 
-document.addEventListener('keydown', (event) => {
-	if (event.keyCode === 32) {
-		restartGame();
-	}
-});
+function initWindowEvents() {
+	window.addEventListener('resize', () => {
+		canvas.setDimensions({ width: window.innerHeight, height: window.innerHeight });
+		init();
+	});
+}
 
 init();
+initWindowEvents();

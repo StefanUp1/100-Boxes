@@ -1,6 +1,6 @@
 import { fabric } from 'fabric';
-import colors from './colors';
-import elements from './elements';
+import colors from '../../constants/colors';
+import elements from '../../constants/elements';
 
 const [, canvas] = elements;
 const [, , colorDefault] = colors;
