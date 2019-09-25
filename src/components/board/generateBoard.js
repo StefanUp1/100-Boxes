@@ -1,5 +1,10 @@
 import Square from './square';
 
+/**
+ * Matrix representing canvas square fields.
+ * @const {array}
+ *
+ */
 const fields = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,6 +18,14 @@ const fields = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+/**
+ * Function that create an array
+ * of 'Square' objects from
+ * a 'fields' matrix.
+ *
+ * @return {array} Array of board squares
+ *
+ */
 export default function generateBoard() {
 	const squareArray = [];
 

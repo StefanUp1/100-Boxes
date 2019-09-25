@@ -2,10 +2,24 @@ import { fabric } from 'fabric';
 import colors from '../../constants/colors';
 import elements from '../../constants/elements';
 
+/**
+ * @const {object}
+ */
 const [, canvas] = elements;
+
+/**
+ * @const {string}
+ */
 const [, , colorDefault] = colors;
 
+/** Class representing a single Square. */
 export default class Square {
+	/**
+	 * Create a square.
+	 * @param {object} position - The position value.
+	 * @param {object} index - The index value.
+	 *
+	 */
 	constructor(position, index) {
 		this.clickable = true;
 		this.clicked = false;
@@ -22,7 +36,11 @@ export default class Square {
 		};
 	}
 	
+	/** Draw the single Square on canvas. */
 	draw() {
+		/**
+		 * @const {object}
+		 */
 		const rect = new fabric.Rect({
 			top: this.position.y,
 			left: this.position.x,
